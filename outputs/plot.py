@@ -8,11 +8,12 @@ import pandas as pd
 import seaborn as sns
 
 
-sns.set(
+sns.set_theme(
     style="darkgrid",
     rc={
-        "figure.figsize": (7.2, 4.45),
-        "text.usetex": True,
+#        "figure.figsize": (7.2, 4.45),
+#        "text.usetex": True,
+        "text.usetex": False,
         "xtick.labelsize": 16,
         "ytick.labelsize": 16,
         "font.size": 15,
@@ -63,12 +64,12 @@ if __name__ == "__main__":
     prs.add_argument("-f", nargs="+", required=True, help="Measures files\n")
     prs.add_argument("-l", nargs="+", default=None, help="File's legends\n")
     prs.add_argument("-t", type=str, default="", help="Plot title\n")
-    prs.add_argument("-yaxis", type=str, default="system_total_waiting_time", help="The column to plot.\n")
+    prs.add_argument("-yaxis", type=str, default="system_mean_waiting_time", help="The column to plot.\n")
     prs.add_argument("-xaxis", type=str, default="step", help="The x axis.\n")
-    prs.add_argument("-ma", type=int, default=1, help="Moving Average Window.\n")
+    prs.add_argument("-ma", type=int, default=10, help="Moving Average Window.\n")
     prs.add_argument("-sep", type=str, default=",", help="Values separator on file.\n")
     prs.add_argument("-xlabel", type=str, default="Time step (seconds)", help="X axis label.\n")
-    prs.add_argument("-ylabel", type=str, default="Total waiting time (s)", help="Y axis label.\n")
+    prs.add_argument("-ylabel", type=str, default="system_mean_waiting_time(s)", help="Y axis label.\n")
     prs.add_argument("-output", type=str, default=None, help="PDF output filename.\n")
 
     args = prs.parse_args()

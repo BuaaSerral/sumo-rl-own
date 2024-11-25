@@ -82,7 +82,7 @@ class SumoEnvironment(gym.Env):
         self,
         net_file: str,
         route_file: str,
-        out_csv_name: Optional[str] = None,
+        out_csv_name: Optional[str] = None,#Optional[str] = Union[str,None]
         use_gui: bool = False,
         virtual_display: Tuple[int, int] = (3200, 1800),
         begin_time: int = 0,
@@ -143,7 +143,7 @@ class SumoEnvironment(gym.Env):
         self.sumo = None
 
         if LIBSUMO:
-            traci.start([sumolib.checkBinary("sumo"), "-n", self._net])  # Start only to retrieve traffic light information
+            traci.start([sumolib.checkBinary("sumo"), "-n", self._net])  #  
             conn = traci
         else:
             traci.start([sumolib.checkBinary("sumo"), "-n", self._net], label="init_connection" + self.label)
@@ -151,7 +151,7 @@ class SumoEnvironment(gym.Env):
 
         self.ts_ids = list(conn.trafficlight.getIDList())
         self.observation_class = observation_class
-
+        #key:value
         if isinstance(self.reward_fn, dict):
             self.traffic_signals = {
                 ts: TrafficSignal(
@@ -165,7 +165,7 @@ class SumoEnvironment(gym.Env):
                     self.reward_fn[ts],
                     conn,
                 )
-                for ts in self.reward_fn.keys()
+                for ts in self.reward_fn.keys()#For different reward_fn
             }
         else:
             self.traffic_signals = {
@@ -348,7 +348,7 @@ class SumoEnvironment(gym.Env):
                 if self.traffic_signals[ts].time_to_act:
                     self.traffic_signals[ts].set_next_phase(action)
 
-    def _compute_dones(self):
+    def _compute_dones(self) -> dict:
         dones = {ts_id: False for ts_id in self.ts_ids}
         dones["__all__"] = self.sim_step >= self.sim_max_time
         return dones

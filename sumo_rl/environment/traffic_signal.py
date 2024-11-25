@@ -53,7 +53,7 @@ class TrafficSignal:
         min_green: int,
         max_green: int,
         begin_time: int,
-        reward_fn: Union[str, Callable],
+        reward_fn: Union[str, Callable],#Callable refers to a function
         sumo,
     ):
         """Initializes a TrafficSignal object.
@@ -68,6 +68,21 @@ class TrafficSignal:
             begin_time (int): The time in seconds when the traffic signal starts operating.
             reward_fn (Union[str, Callable]): The reward function. Can be a string with the name of the reward function or a callable function.
             sumo (Sumo): The Sumo instance.
+        Default:
+            green_phase(int): green_phase = 0:Which phase is green.
+            is_yellow(bool) = False.
+            time_since_last_phase_change(int) = 0.
+            next_action_time(int) = begin_time.
+            last_measure(float) = 0.0
+            last_reward = None
+            lanes, out_lanes, lanes_length: lanes mean approaching lane.
+            obsevervation_fn, obsevervation_space.
+            action_sapce.
+            num_green_phases.
+            green_phases(list), all_phases(list): all_phases include green and yellow
+            yellow_dict(dict)
+            time_to_act(bool): Returns True if the traffic signal should act in the current step.
+            
         """
         self.id = ts_id
         self.env = env
@@ -199,8 +214,12 @@ class TrafficSignal:
         reward = self.last_measure - ts_wait
         self.last_measure = ts_wait
         return reward
-
+    
     def _observation_fn_default(self):
+        '''
+        This function is meaningless, which is equal to .observation.DefaultObservationFunction(ObservationFunction).__call__()
+        return type: np.ndarray
+        '''
         phase_id = [1 if self.green_phase == i else 0 for i in range(self.num_green_phases)]  # one-hot encoding
         min_green = [0 if self.time_since_last_phase_change < self.min_green + self.yellow_time else 1]
         density = self.get_lanes_density()
