@@ -412,6 +412,7 @@ class SumoEnvironment(gym.Env):
 
     def _sumo_step(self):
         self.sumo.simulationStep()
+        #traci.simulationStep()
 
     def _get_system_info(self):
         vehicles = self.sumo.vehicle.getIDList()
